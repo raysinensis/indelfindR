@@ -1,0 +1,5 @@
+source("https://bioconductor.org/biocLite.R")
+biocLite("sangerseqR")
+
+install.packages("stringr", repos='http://cran.us.r-project.org')
+
