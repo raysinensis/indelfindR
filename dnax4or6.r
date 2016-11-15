@@ -1,11 +1,12 @@
+#!/usr/bin/env Rscript
+
 ##measuring runtime
 ptm <- proc.time()
-h <- g + 1
 
 ##setup, read ab1 file for peaks
 library(sangerseqR)
 setwd("/home/rf/Desktop")
-data1 <- read.abif("6_7F.ab1")
+data1 <- read.abif("2-2.ab1")
 loclist <- data1@data$PLOC.2
 Alist = c()
 Clist = c()
@@ -17,6 +18,7 @@ for (locnum in loclist){
 	Tlist <- append(Tlist, (data1@data$DATA.11[locnum]))
 	Clist <- append(Clist, (data1@data$DATA.12[locnum]))}
 calllist = c()
+
 ##threshold maybe tuned for your needs
 thresh=0.05
 for (i in 1:length(loclist)){
@@ -32,9 +34,11 @@ for (i in 1:length(loclist)){
 		call1 <- call1 + 1}
 	calllist <- append(calllist, call1)
 	}
+
 ##the readout for each nt is a 4 digit number
 sanger1 <- sangerseq(data1)
 refseq <- primarySeq(sanger1, string = TRUE)
+
 ##locating a sequence before the cutsite (should be uniform), the actual compared sequence will be 30bp downstream
 library(stringr)
 site1 <- str_locate(refseq, "CGATCCTGCTTT")[2]
@@ -42,14 +46,17 @@ site31 <- site1 + 30
 site40 <- site1 +39
 refseqfrag <- unlist(calllist[site31:site40])
 seqscore <- str_c(refseqfrag,collapse="")
+
 ##enter wildtype sequence around the area of interest here
 (wtseq <- "GTCTACAGAGTGAGTTCTGGGAGAGCCAGAGCTACACAGAGAAACCCTGTCTTGGAGTGCGGGGAACAGAACTGTTGCAGTTGTGTTAACAGAGAACCCCTCGTGACGCTTGTTTTCTCAGATAACGGTTACTATCTGCCATACTACAAGAGAGAAAGGAATAAGCGGAGCACGCAGATCACAGTCAGGTTCCTGGACAGCCCCCACTACAGCAAGAACATCCGCAAGAAGGACCCTATCCTCCTGCTGCACTGGTGGAAGGAGATATTCGGGACGATCCTGCTTTGAATCGTGGCCACAACGTTTATCGTGCGCAGGCTTTTCCATCCTCAGCCCCACAGGGTAAGATGCTCTGTCAACCTAATGTGCTTCCAAGTGGTTGCTGTGTAGGAAACCTCTGGGAGGGAGAGTTCCGGCACTCAGACTTACCAGAGAATCATCTGCGCTTGTACTGTCTCCGTCACTTAGCCACAGAGTCACTGTACCTGAACAGCCAGTATGACATAGCCTACTGCTGCCAGGTTGCAGTCTCATACAGTGTGTGACTACAACATAGTATTTAGTATCTGTGTATCTGAAATAGATGAGGCACACTTAAAAAAAAAAAAAAAAAAAACACTAGCCACAATTGTTTTCAACTTTATTGCAATGTTACGGGTCGGCTGGAGAGATGGTTCAGTGGTTAGAGGACCTGAGTTCATTTTGCAGCACCCACATCAGACAACCCTTACCTGCCTGTAACTCCAGCTACTGGAAATCTGACA") 
 sitewt <- str_locate(wtseq, "CGATCCTGCTTT")[2]
+
 ##investigating the -10-+9 range of indels
 for (i in 0:20){
 	fragname = paste("frag",i,sep="")
 	assign(fragname, unlist(strsplit(substr(wtseq, sitewt+20+i, sitewt+29+i),split="")))}
 counter <- 0
+
 ##searching for up to 4 seqs to match the sequencing results, usually around 1-2 min
 for (i in 0:18){
 	fi <- get(paste("frag",i,sep=""))
@@ -94,8 +101,9 @@ for (i in 0:18){
 		}
 print("for 4 variables search:")
 print(counter)
+
 ##if 4 seq failed, a much more intensive search of up to 6 seqs will start, 30min to 1hour
-##if (counter == 0){
+if (counter == 0){
 for (i in 0:20){
 	fragname = paste("frag",i,sep="")
 	assign(fragname, unlist(strsplit(substr(wtseq, sitewt+20+i, sitewt+24+i),split="")))}
@@ -150,6 +158,6 @@ for (i in 0:18){
 		}
 	}
 }
-##}
 print(counter)
+}
 proc.time() - ptm
