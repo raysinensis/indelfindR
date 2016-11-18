@@ -30,11 +30,28 @@ for (i in 1:length(loclist)){
 	}
 calllist <- calllist[-1,]
 calllist <- calllist[-(length(calllist)/4),]
+##trim 15nt from each end
+calllist <- calllist[-(1:15),]
+calllist <- calllist[-((length(calllist)/4-14):(length(calllist)/4)),]
 
 ##getting highest and 2nd highest reads, above threshold
 call1 = c()
 call2 = c()
-thresh=0.2
+thresauto = 0
+for (i in 1:(length(calllist)/4)){
+	max1 = max(calllist[i,])
+	max2 = max(calllist[i,][calllist[i,]!=max1])
+	if (max2 == 0){
+		max3 = 0}
+	else {
+		max3 = max(calllist[i,][calllist[i,]<max2])
+		if ((max3/max1)>thresauto){
+			thresauto = (max3/max1)
+			}
+		}
+	}
+##thresh=0.2
+thresh=thresauto
 for (i in 1:(length(calllist)/4)){
 	max1 = max(calllist[i,])
 	max2 = max(calllist[i,][calllist[i,]!=max1])
@@ -54,11 +71,12 @@ for (i in 1:(length(calllist)/4)){
 		call2 <- append(call2, call1[i])
 		}
 	else {
+	cat ("secondary call made at ", i, "\n")
 	if (max2 == calllist[i,4]){
 		call2 <- append(call2,"T")
 		}
 	else if (max2 == calllist[i,3]){
-		call2 <- append(call2,"G")
+		call2 <- append(call2,"G")	
 		}
 	else if (max2 == calllist[i,2]){
 		call2 <- append(call2,"C")
