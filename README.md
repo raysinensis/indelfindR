@@ -10,3 +10,5 @@ Different verisions of the script:
 dnax4or6.r is the original script where the user has to define the signal threshold (in my own experience 0.1 works well)
 dnax4or6autocall.r considers the ~40 nt signals around the area of interest, and picks the largest drop-off for each of A,C,G, and T as the threshold, this is the recommended script to start with
 dnax4or6autocall-inputpath.r can be executed on mac or linux command line directly, where the user will be prompted to enter input path and filename (strangely some mac users with foreign languages have problems editing the previous scripts to their custom path and file names, this is the workaround)
+
+As an alternative approach for simpler cases, BackgroundRead.r reads out different allelles as seperate files, where when no secondary base read is over the automatically determined threshold, the primary read is given instead. Suitable for quick blast afterwards
