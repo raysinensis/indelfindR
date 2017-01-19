@@ -4,7 +4,7 @@ finding possible combinations of indel alleles from inhomogenous sanger sequenci
 Genotyping of CRISPR-cas9-edited embryonic cells can be done through PCR and DNA sequencing. DNA sequencing data may turn out inhomogeneous, if the alleles arise late, or cells from multple zygotes were mixed together.
 This is a short R script to anaylze the sequencing ab1 file, call multiple peaks at each position, and screen the possible indel combinations that may result in those results.
 
-Currently the script detects up to 6 different alleles (a much quicker 4x version is ran first, around 1-3 min. if no suitable results are found, the 6x version will take 1-2 hrs), outputing whether each allele may contain insertions or deletions less than 10bp. Point mutations, and the specific insertions, can then be determined by eye.
+Currently the script searches with 2 methods: 1 found in the indelfindR-search script, looks at whether indels of up to 20nt can fit into a 10nt section of those chromatographs. Alternatively, the dnax4or6 scripts detect up to 6 different alleles (a much quicker 4x version is ran first, around 1-3 min. if no suitable results are found, the 6x version will take 1-2 hrs), outputing whether each allele may contain insertions or deletions less than 10bp. Point mutations, and the specific insertions, can then be determined by eye. (coming later)
 
 Different verisions of the script:
 dnax4or6.r is the original script where the user has to define the signal threshold (in my own experience 0.1 works well)
