@@ -22,10 +22,12 @@ shinyUI(fluidPage(
 	  
 	),
     mainPanel(
+	  tags$button(id = 'close', type = "button", class = "btn action-button", onclick = "setTimeout(function(){window.close();},23);", "Close"),
+          p(" "),
 	  p("indelFindR will search for potential indels (or WT) from sequencing results"),
 	  br(),
-	  p("Please select ABI file(s)"),
-	  p("Please also input the gRNA target sequence, and desired genomic area ~500bp"),
+	  p("Please select AB1 file(s)"),
+	  p("Please also input the gRNA target sequence, and the desired genomic area ~400bp"),
 	  br(),
 	  h2("Analysis Results"),
 	  h5(verbatimTextOutput("text1"))

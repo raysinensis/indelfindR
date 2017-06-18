@@ -21,4 +21,7 @@ shinyServer(function(input, output) {
 	})
   output$text1<-renderText({found()
     })
+  observe({
+    if (input$close > 0) stopApp()                             # stop shiny
+    })
 })
