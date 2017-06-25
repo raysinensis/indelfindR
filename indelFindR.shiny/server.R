@@ -1,6 +1,14 @@
 library(shiny)
 source("indel.R")
 shinyServer(function(input, output) {
+  observeEvent(input$How, {
+      showModal(modalDialog(
+        title = "How it works:",
+        "The simple script tries to locate the first half of the gRNA sequence, and reads 100 bp downstream to assess frameshift. Indels up to 35 bp are compared to sequencing signal peaks at each call position ",
+        easyClose = TRUE,
+        footer = NULL
+      ))
+    })
   gRNA <- eventReactive(input$button, {
     input$gRNA
     })

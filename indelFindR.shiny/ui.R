@@ -22,8 +22,9 @@ shinyUI(fluidPage(
 	  
 	),
     mainPanel(
-	  tags$button(id = 'close', type = "button", class = "btn action-button", onclick = "setTimeout(function(){window.close();},23);", "Close"),
-          p(" "),
+	  div(style="display: inline-block;vertical-align:top; width: 60px;",tags$button(id = 'close', type = "button", class = "btn action-button", onclick = "setTimeout(function(){window.close();},23);", "Close"),
+          p(" ")),
+	  div(style="display: inline-block;vertical-align:top; width: 150px;",actionButton("How", "How it works")),
 	  p("indelFindR will search for potential indels (or WT) from sequencing results"),
 	  br(),
 	  p("Please select AB1 file(s)"),
