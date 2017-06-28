@@ -3,6 +3,7 @@ indel<-function(filelist,filename,gRNA,seq){
 	searchseq=substr(gRNA,1,nchar(gRNA)-10)
 	filenum=0
 	for (fileab1 in filelist){
+	result=c()
 	filenum=filenum+1
 	write("-----------------", file = "sequences1.txt", sep = "\n", append = TRUE)
 	write(filename[filenum], file = "sequences1.txt", sep = "\n", append = TRUE)
@@ -90,6 +91,7 @@ indel<-function(filelist,filename,gRNA,seq){
 
 	##investigating the -35:+35 range of indels
 	wtscorelist = c()
+	numofhit=0
 	for (i in (-35:35)){
 		fragname = paste("frag",i,sep="")
 		fragseq = str_c(unlist(strsplit(substr(wtseq, sitewt+40+i, sitewt+89+i),split="")),collapse="")
@@ -109,8 +111,16 @@ indel<-function(filelist,filename,gRNA,seq){
 			break}
 		}
 		if (matchval == 0){
+		numofhit=numofhit+1
+		if (i == 0) {out = 'wt'}
+		if (i > 0) {out = paste('del ',i,sep="")}
+		if (i < 0) {out = paste('in ', -i, sep='')}
+		result[1]=filename[filenum]
+		result[numofhit+1]=out
 		#print(fragname)
 		write(fragname, file = "sequences1.txt", sep = "\n", append = TRUE)
-	}}}
-	result<- paste(readLines("sequences1.txt"), collapse="\n")
-	return(result)}
+	}}
+	write(result, file = "sequences2.txt", sep = ",", append = TRUE)
+	}
+	results<- paste(readLines("sequences2.txt"), collapse="\n")
+	return(results)}
