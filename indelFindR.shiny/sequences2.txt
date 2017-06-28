@@ -1,8 +1,0 @@
-13_pnptF.ab1
-in 1
-del 2
-del 13
-
-
-1_pnptF.ab1
-del 2
