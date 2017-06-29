@@ -1,6 +1,7 @@
 library(shiny)
 source("indel.R")
-shinyServer(function(input, output) {
+source("helpers.R")
+shinyServer(function(input, output, session) {
   observeEvent(input$How, {
       showModal(modalDialog(
         title = "How it works:",
@@ -25,11 +26,12 @@ shinyServer(function(input, output) {
     input$file$datapath
     })
   found <- eventReactive(input$button, {
-    indel(filelist(),filenames(),gRNA(),seq())
+    withBusyIndicatorServer("button", {indel(filelist(),filenames(),gRNA(),seq())})
 	})
   output$text1<-renderText({found()
     })
   observe({
     if (input$close > 0) stopApp()                             # stop shiny
     })
+  session$onSessionEnded(stopApp)
 })

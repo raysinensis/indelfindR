@@ -1,5 +1,9 @@
 library(shiny)
+library(shinyjs)
+source("helpers.R")
 shinyUI(fluidPage(
+  useShinyjs(),
+  tags$style(appCSS),
   titlePanel("indelFindR"),
   sidebarLayout(
     sidebarPanel(
@@ -17,7 +21,7 @@ shinyUI(fluidPage(
 	  ),
 	  fluidRow(
 	    column(12, 
-   		  actionButton("button", label = "Submit", style="color: #fff; background-color: #337ab7; border-color: #2e6da4"))
+   		  withBusyIndicatorUI(actionButton("button", label = "Submit", class = "btn-primary", style="color: #fff; background-color: #337ab7; border-color: #2e6da4")))
       )
 	  
 	),
