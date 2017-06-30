@@ -7,7 +7,8 @@ shinyUI(fluidPage(
   titlePanel("indelFindR"),
   sidebarLayout(
     sidebarPanel(
-      p("INPUT"),
+    tabsetPanel(id='navbar',
+      tabPanel(title='INPUT',value='INPUT',
 	  fluidRow(
         column(12,
           fileInput("file", label = h5("select file(s)"), multiple = TRUE),
@@ -25,6 +26,13 @@ shinyUI(fluidPage(
       )
 	  
 	),
+      tabPanel(title='Settings',value='Settings',
+        fluidRow(
+	    column(12,
+	    textInput("threshold", label=h5("set threshold (0.05 works well), or 0 for autothreshold"),value = "0"),
+	    textInput("range", label=h5("set indel search range"),value = "35"),
+	    textInput("length", label=h5("set search length"),value = "20")))	
+	))),
     mainPanel(
 	  div(style="display: inline-block;vertical-align:top; width: 60px;",tags$button(id = 'close', type = "button", class = "btn action-button", onclick = "setTimeout(function(){window.close();},23);", "Close"),
           p(" ")),

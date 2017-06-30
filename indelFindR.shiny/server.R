@@ -25,8 +25,17 @@ shinyServer(function(input, output, session) {
   filelist <- eventReactive(input$button, {
     input$file$datapath
     })
+  sthreshold <- eventReactive(input$button, {
+    input$threshold
+    })
+  srange <- eventReactive(input$button, {
+    input$range
+    })
+  slength <- eventReactive(input$button, {
+    input$length
+    })
   found <- eventReactive(input$button, {
-    withBusyIndicatorServer("button", {indel(filelist(),filenames(),gRNA(),seq())})
+    withBusyIndicatorServer("button", {indel(filelist(),filenames(),gRNA(),seq(),as.numeric(sthreshold()),as.numeric(srange()),as.numeric(slength()))})
 	})
   output$text1<-renderText({found()
     })

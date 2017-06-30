@@ -1,4 +1,4 @@
-indel<-function(filelist,filename,gRNA,seq){
+indel<-function(filelist,filename,gRNA,seq,sthreshold,srange,slength){
 	library(sangerseqR)
 	searchseq=substr(gRNA,1,nchar(gRNA)-10)
 	filenum=0
@@ -65,7 +65,8 @@ indel<-function(filelist,filename,gRNA,seq){
 		}
 	#print(cutnum)
 	##or manually set
-	##cutnum=0.05
+	if (sthreshold>0){
+		cutnum=sthreshold}
 	thresh1 <- c(cutnum*maxA,cutnum*maxC,cutnum*maxG,cutnum*maxT)
 	#print(thresh1)
 	for (i in 1:length(loclist)){
@@ -92,11 +93,11 @@ indel<-function(filelist,filename,gRNA,seq){
 	##investigating the -35:+35 range of indels
 	wtscorelist = c()
 	numofhit=0
-	for (i in (-35:35)){
+	for (i in (-srange:srange)){
 		fragname = paste("frag",i,sep="")
 		fragseq = str_c(unlist(strsplit(substr(wtseq, sitewt+40+i, sitewt+89+i),split="")),collapse="")
 		wtscorelist = rbind(wtscorelist,c(fragname,fragseq))
-		for (j in 1:20){
+		for (j in 1:slength){
 			matchval = 1
 			readbase = calllist[site41+j-1]
 			if ((substring(fragseq,j,j)=="A") & (readbase%/%1000%%10==1)){
