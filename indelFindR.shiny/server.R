@@ -10,6 +10,11 @@ shinyServer(function(input, output, session) {
         footer = NULL
       ))
     })
+  observeEvent(input$default, {
+      updateTextInput(session, "threshold", value = "0")
+      updateTextInput(session, "range", value = "35")
+      updateTextInput(session, "length", value = "20")
+    })
   gRNA <- eventReactive(input$button, {
     input$gRNA
     })

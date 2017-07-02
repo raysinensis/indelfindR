@@ -31,7 +31,8 @@ shinyUI(fluidPage(
 	    column(12,
 	    textInput("threshold", label=h5("set threshold (0.05 works well), or 0 for autothreshold"),value = "0"),
 	    textInput("range", label=h5("set indel search range"),value = "35"),
-	    textInput("length", label=h5("set search length"),value = "20")))	
+	    textInput("length", label=h5("set search length"),value = "20"),
+	    actionButton("default", label = "Reset to Default")))	
 	))),
     mainPanel(
 	  div(style="display: inline-block;vertical-align:top; width: 60px;",tags$button(id = 'close', type = "button", class = "btn action-button", onclick = "setTimeout(function(){window.close();},23);", "Close"),
