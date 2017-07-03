@@ -1,6 +1,8 @@
 indel<-function(filelist,filename,gRNA,seq,sthreshold,srange,slength){
 	library(sangerseqR)
+	library(plyr)
 	searchseq=substr(gRNA,1,nchar(gRNA)-10)
+	df=data.frame(file=character(),mut=character(),stringsAsFactors=FALSE)
 	filenum=0
 	for (fileab1 in filelist){
 	result=c()
@@ -122,6 +124,16 @@ indel<-function(filelist,filename,gRNA,seq,sthreshold,srange,slength){
 		write(fragname, file = "sequences1.txt", sep = "\n", append = TRUE)
 	}}
 	write(result, file = "sequences2.txt", sep = ",", append = TRUE)
+	if (length(result)>1) {if (length(result) >3){mut="mosaic"}
+		else if (length(result) == 3) {mut="het"}
+		else if (length(result) == 2) {if (as.character(result[2]) == "wt") {mut="wt"} else {mut="homo"}}
+		df[filenum,]<-c(as.character(result[1]),mut)}
 	}
 	results<- paste(readLines("sequences2.txt"), collapse="\n")
-	return(results)}
+	df[is.na(df)]<-"error"
+	df2<-count(df,'mut')
+	rownames(df2) <- df2$mut
+	df2$mut<-NULL
+	df2$freq<-df2$freq/sum(df2$freq)
+	write.csv(df2, file = "sequences3.txt")
+	return(list(results,df2))}

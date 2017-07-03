@@ -1,4 +1,5 @@
 library(shiny)
+library(ggplot2)
 source("indel.R")
 source("helpers.R")
 shinyServer(function(input, output, session) {
@@ -42,7 +43,10 @@ shinyServer(function(input, output, session) {
   found <- eventReactive(input$button, {
     withBusyIndicatorServer("button", {indel(filelist(),filenames(),gRNA(),seq(),as.numeric(sthreshold()),as.numeric(srange()),as.numeric(slength()))})
 	})
-  output$text1<-renderText({found()
+  output$text1<-renderText({found()[[1]]
+    })
+  output$plot1<-renderPlot({
+	barplot(t(as.matrix(found()[[2]])),main="genotyping results", xlab="mutation type",col=c("darkblue"))
     })
   observe({
     if (input$close > 0) stopApp()                             # stop shiny
