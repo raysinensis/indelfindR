@@ -45,8 +45,21 @@ shinyServer(function(input, output, session) {
 	})
   output$text1<-renderText({found()[[1]]
     })
+  fig <- eventReactive(input$button, {
+    df=as.data.frame(as.matrix(found()[[2]]))
+    out=ggplot(data=df,aes(x=row.names(df), y=freq))+
+    geom_bar(stat="identity", width = .7)+scale_fill_grey() +
+    theme_bw()+theme(axis.title.x=element_blank(),text=element_text(family="serif",size=15))
+    out
+    })
   output$plot1<-renderPlot({
-	barplot(t(as.matrix(found()[[2]])),main="genotyping results", xlab="mutation type",col=c("darkblue"))
+	#barplot(t(as.matrix(found()[[2]])),main="genotyping results", xlab="mutation type",col=c("darkblue"))
+	fig()
+    })
+  output$Download <- downloadHandler(
+    filename = "seq.png",
+    content = function(file) {
+        ggsave(file, plot = fig(), device = "png")
     })
   observe({
     if (input$close > 0) stopApp()                             # stop shiny

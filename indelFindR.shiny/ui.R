@@ -45,7 +45,8 @@ shinyUI(fluidPage(
 	  br(),
 	  h2("Analysis Results"),
 	  h5(verbatimTextOutput("text1")),
-	  plotOutput("plot1")
+	  plotOutput("plot1"),
+	  downloadButton('Download')
     )
   )
 ))
