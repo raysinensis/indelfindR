@@ -123,17 +123,20 @@ indel<-function(filelist,filename,gRNA,seq,sthreshold,srange,slength){
 		#print(fragname)
 		write(fragname, file = "sequences1.txt", sep = "\n", append = TRUE)
 	}}
-	write(result, file = "sequences2.txt", sep = ",", append = TRUE)
+	resultv=unlist(result)
+	write.table(resultv, row.names=FALSE,col.names=FALSE, file = "sequences2.txt", sep = ",", append = TRUE,eol=',')
+	if (length(result)>1){write(',,,,,,,,,,\n', file = "sequences2.txt", sep = "", append = TRUE)}
 	if (length(result)>1) {if (length(result) >3){mut="mosaic"}
 		else if (length(result) == 3) {mut="het"}
 		else if (length(result) == 2) {if (as.character(result[2]) == "wt") {mut="wt"} else {mut="homo"}}
 		df[filenum,]<-c(as.character(result[1]),mut)}
 	}
 	results<- paste(readLines("sequences2.txt"), collapse="\n")
+	resultt <- read.csv(file="sequences2.txt", header=FALSE, sep=",")
 	df[is.na(df)]<-"error"
 	df2<-count(df,'mut')
 	rownames(df2) <- df2$mut
 	df2$mut<-NULL
 	df2$freq<-df2$freq/sum(df2$freq)
 	write.csv(df2, file = "sequences3.txt")
-	return(list(results,df2))}
+	return(list(results,df2,resultt[order(resultt$V1),]))}

@@ -45,6 +45,8 @@ shinyServer(function(input, output, session) {
 	})
   output$text1<-renderText({found()[[1]]
     })
+  output$table1<-renderTable({found()[[3]]},colnames=FALSE,na=''
+    )
   fig <- eventReactive(input$button, {
     df=as.data.frame(as.matrix(found()[[2]]))
     out=ggplot(data=df,aes(x=row.names(df), y=freq))+

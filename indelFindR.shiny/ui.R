@@ -44,7 +44,8 @@ shinyUI(fluidPage(
 	  p("Please also input the gRNA target sequence, and the desired genomic area ~400bp"),
 	  br(),
 	  h2("Analysis Results"),
-	  h5(verbatimTextOutput("text1")),
+	  #h5(verbatimTextOutput("text1")),
+	  tableOutput("table1"),
 	  plotOutput("plot1"),
 	  downloadButton('Download')
     )
