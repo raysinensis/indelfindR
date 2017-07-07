@@ -58,13 +58,25 @@ shinyServer(function(input, output, session) {
 	#barplot(t(as.matrix(found()[[2]])),main="genotyping results", xlab="mutation type",col=c("darkblue"))
 	fig()
     })
-  output$Download <- downloadHandler(
+  output$Downloadg <- downloadHandler(
     filename = "seq.png",
     content = function(file) {
         ggsave(file, plot = fig(), device = "png")
     })
-  observe({
-    if (input$close > 0) stopApp()                             # stop shiny
+  output$Downloadt <- downloadHandler(
+    filename = "sequences.txt",
+    content = function(file) {file.copy("sequences2.txt",file)
     })
-  session$onSessionEnded(stopApp)
+  observe({
+    if (input$close > 0) {
+		files=c("sequences1.txt","sequences2.txt","sequences3.txt")
+		folder="last/"
+		sapply(files,FUN=function(eachPath){file.rename(from=eachPath,to=paste(folder,eachPath,sep=''))})
+		stopApp()}
+    })
+  session$onSessionEnded(function(){
+		files=c("sequences1.txt","sequences2.txt","sequences3.txt")
+		folder="last/"
+		sapply(files,FUN=function(eachPath){file.rename(from=eachPath,to=paste(folder,eachPath,sep=''))})
+		stopApp})
 })

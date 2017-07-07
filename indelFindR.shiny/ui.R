@@ -39,7 +39,6 @@ shinyUI(fluidPage(
           p(" ")),
 	  div(style="display: inline-block;vertical-align:top; width: 150px;",actionButton("How", "How it works")),
 	  p("indelFindR will search for potential indels (or WT) from sequencing results"),
-	  br(),
 	  p("Please select AB1 file(s)"),
 	  p("Please also input the gRNA target sequence, and the desired genomic area ~400bp"),
 	  br(),
@@ -47,7 +46,11 @@ shinyUI(fluidPage(
 	  #h5(verbatimTextOutput("text1")),
 	  tableOutput("table1"),
 	  plotOutput("plot1"),
-	  downloadButton('Download')
+	  conditionalPanel(
+		condition = "input.button > 0",
+		div(style="display: inline-block;vertical-align:top; width: 150px;",downloadButton('Downloadt',"Download txt"),style="float:left"),
+          	p(" "),
+	 	div(style="display: inline-block;vertical-align:top; width: 150px;",downloadButton('Downloadg',"Download png")))
     )
   )
 ))
