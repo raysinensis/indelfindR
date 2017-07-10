@@ -35,9 +35,16 @@ shinyUI(fluidPage(
 	    actionButton("default", label = "Reset to Default")))	
 	))),
     mainPanel(
+	tags$style(type="text/css",
+  ".shiny-output-error { visibility: hidden; }",
+  ".shiny-output-error:before { visibility: hidden; }"
+),
+
 	  div(style="display: inline-block;vertical-align:top; width: 60px;",tags$button(id = 'close', type = "button", class = "btn action-button", onclick = "setTimeout(function(){window.close();},23);", "Close"),
           p(" ")),
-	  div(style="display: inline-block;vertical-align:top; width: 150px;",actionButton("How", "How it works")),
+	  div(style="display: inline-block;vertical-align:top; width: 150px;",actionButton("How", "How it works"),
+	  p(" ")),
+	  div(style="display: inline-block;vertical-align:top; width: 100px;",actionButton("Reload", "Reload Last")),
 	  p("indelFindR will search for potential indels (or WT) from sequencing results"),
 	  p("Please select AB1 file(s)"),
 	  p("Please also input the gRNA target sequence, and the desired genomic area ~400bp"),
@@ -47,10 +54,12 @@ shinyUI(fluidPage(
 	  tableOutput("table1"),
 	  plotOutput("plot1"),
 	  conditionalPanel(
-		condition = "input.button > 0",
+		condition = "input.button > 0||input.Reload > 0",
 		div(style="display: inline-block;vertical-align:top; width: 150px;",downloadButton('Downloadt',"Download txt"),style="float:left"),
           	p(" "),
 	 	div(style="display: inline-block;vertical-align:top; width: 150px;",downloadButton('Downloadg',"Download png")))
     )
   )
 ))
+
+

@@ -1,6 +1,8 @@
-indel<-function(filelist,filename,gRNA,seq,sthreshold,srange,slength){
+indel<-function(filelist,filename,gRNA,seq,sthreshold,srange,slength,newvar){
 	library(sangerseqR)
 	library(plyr)
+	if(newvar==1){
+	file.remove("sequences1.txt","sequences2.txt","sequences3.txt")
 	searchseq=substr(gRNA,1,nchar(gRNA)-10)
 	df=data.frame(file=character(),mut=character(),stringsAsFactors=FALSE)
 	filenum=0
@@ -131,12 +133,15 @@ indel<-function(filelist,filename,gRNA,seq,sthreshold,srange,slength){
 		else if (length(result) == 2) {if (as.character(result[2]) == "wt") {mut="wt"} else {mut="homo"}}
 		df[filenum,]<-c(as.character(result[1]),mut)}
 	}
-	results<- paste(readLines("sequences2.txt"), collapse="\n")
-	resultt <- read.csv(file="sequences2.txt", header=FALSE, sep=",")
 	df[is.na(df)]<-"error"
 	df2<-count(df,'mut')
 	rownames(df2) <- df2$mut
 	df2$mut<-NULL
 	df2$freq<-df2$freq/sum(df2$freq)
 	write.csv(df2, file = "sequences3.txt")
+	}
+	results<- paste(readLines("sequences2.txt"), collapse="\n")
+	resultt <- read.csv(file="sequences2.txt", header=FALSE, sep=",")
+	df2<-read.csv(file="sequences3.txt", header=TRUE,stringsAsFactors=FALSE)
+	#df2$freq<-as.numeric(df2$freq)
 	return(list(results,df2,resultt[order(resultt$V1),]))}

@@ -16,6 +16,10 @@ shinyServer(function(input, output, session) {
       updateTextInput(session, "range", value = "35")
       updateTextInput(session, "length", value = "20")
     })
+  observeEvent(input$Reload, {
+	files=c("last/sequences1.txt","last/sequences2.txt","last/sequences3.txt")
+	file.copy(files,"./")
+	})
   gRNA <- eventReactive(input$button, {
     input$gRNA
     })
@@ -40,16 +44,26 @@ shinyServer(function(input, output, session) {
   slength <- eventReactive(input$button, {
     input$length
     })
-  found <- eventReactive(input$button, {
-    withBusyIndicatorServer("button", {indel(filelist(),filenames(),gRNA(),seq(),as.numeric(sthreshold()),as.numeric(srange()),as.numeric(slength()))})
+  v <- reactiveValues(new = 1L)
+  observeEvent(input$button,v$new<-1)
+  observeEvent(input$Reload,v$new<-0)
+  #newvar <- eventReactive(input$button, {
+  #  1
+  #  })
+  #newvar <- eventReactive(input$Reload, {
+  #  2
+  #  })
+  found <- eventReactive(c(input$button,input$Reload), {
+    withBusyIndicatorServer("button", {indel(filelist(),filenames(),gRNA(),seq(),as.numeric(sthreshold()),as.numeric(srange()),as.numeric(slength()),v$new)})
 	})
   output$text1<-renderText({found()[[1]]
     })
   output$table1<-renderTable({found()[[3]]},colnames=FALSE,na=''
     )
-  fig <- eventReactive(input$button, {
+  fig <- eventReactive(c(input$button,input$Reload), {
     df=as.data.frame(as.matrix(found()[[2]]))
-    out=ggplot(data=df,aes(x=row.names(df), y=freq))+
+    df$freq<- as.numeric(as.character(df$freq))
+    out=ggplot(data=df,aes(x=X, y=freq))+
     geom_bar(stat="identity", width = .7)+scale_fill_grey() +
     theme_bw()+theme(axis.title.x=element_blank(),text=element_text(family="serif",size=15))
     out
