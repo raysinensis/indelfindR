@@ -15,3 +15,5 @@ dnax4or6autocall.r considers the ~40 nt signals around the area of interest, and
 dnax4or6autocall-inputpath.r can be executed on mac or linux command line directly, where the user will be prompted to enter input path and filename (strangely some mac users with foreign languages have problems editing the previous scripts to their custom path and file names, this is the workaround)
 
 As an alternative approach for simpler cases, BackgroundRead.r reads out different allelles as seperate files, where when no secondary base read is over the automatically determined threshold, the primary read is given instead. Suitable for quick blast afterwards
+
+Used for proof-of-principle generation of PNPT1 ko, and another short-lived collaboration, no longer maintained. Special thanks to J for feedback.
